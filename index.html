@@ -178,17 +178,27 @@ function chooseProblemMode(){
 }
 
 function chooseFormat(){
-  const formats = ['standard'];
-  if(difficultyMode==='mixed'){
-    if(maxNum >= 8) formats.push('missing');
-    if(maxNum >= 12) formats.push('choice');
-    if(maxNum >= 16) formats.push('truefalse');
+  const formats = ['standard','missing','choice','truefalse'];
+
+  if(difficultyMode === 'range'){
+    if(isBossCard){
+      return ['missing','choice','truefalse'][randInclusive(2)];
+    }
+    return formats[randInclusive(formats.length-1)];
   }
+
+  let pool = ['standard'];
+  if(maxNum >= 5)  pool.push('missing');
+  if(maxNum >= 8)  pool.push('choice');
+  if(maxNum >= 10) pool.push('truefalse');
+  if(maxNum >= 20){ pool.push('missing','choice'); }
+  if(maxNum >= 35){ pool.push('truefalse'); }
+
   if(isBossCard){
-    const bossFormats = ['missing','choice','truefalse'];
-    return bossFormats[randInclusive(bossFormats.length-1)];
+    pool.push('missing','choice','truefalse');
   }
-  return formats[randInclusive(formats.length-1)];
+
+  return pool[randInclusive(pool.length-1)];
 }
 
 function buildBaseProblem(){
